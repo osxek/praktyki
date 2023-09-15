@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Informacje o SSL</title>
+    </head>
+    <body>
+        <h1>Informacje o SSL</h1>
+        <ul>
+            {% for result in ssl_results %}
+                <li>
+                    <strong>Nazwa strony: </strong> {{result.nazwa_strony}} <br>
+                    {% if result.error_message %}
+                        <strong>Blad</strong> {{result.error_message}} <br>
+                    {% else %}
+                        <strong>Wazna do: </strong> {{result.wazna_do}} <br>
+                        <strong>Pozostalo dni: </strong> {{result.pozostalo_dni}} <br>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

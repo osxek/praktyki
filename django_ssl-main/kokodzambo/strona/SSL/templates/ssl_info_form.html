@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sprawdź SSL</title>
+</head>
+<body>
+    <h1>Sprawdź informacje o SSL</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="url">Podaj adres strony do sprawdzenia:</label>
+        <input type="text" id="url" name="url">
+        <button type="submit">Sprawdź</button>
+    </form>
+</body>
+</html>
