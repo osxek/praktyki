@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en"
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SSL Checker</title>
+</head>
+<body>
+  
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprawdź SSL</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <style>
+        @font-face {
+            font-family: Osiris;
+            src: url('{% static "Osiris.woff2" %}') format('woff2');
+        }
+        body {
+            font-family: "Osiris", sans-serif;
+            background-image: url('{% static "image.jpg" %}');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #ssl-container {
+            margin: 150px auto 20px; 
+            max-width: 500px; 
+            max-height: 700px;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        #ssl-header {
+            padding: 20px;
+            background: transparent;
+            border-bottom: 2px solid rgba(20, 143, 32, 0.656); 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #ssl-form {
+            margin: 20px;
+            padding: 20px;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        #ssl-form button {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid rgba(15, 220, 35, 0.8);
+            padding: 10px 175px;
+            border-radius: 4px;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+        }
+        #ssl-result {
+            padding: 20px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        label {
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        input[type="text"] {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            font-family: "Osiris", sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            color: #fff;
+        }
+        button[type="submit"] {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 10px 190px;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-family: 'Osiris', sans-serif;
+        }
+        #menu-bar {
+          display: flex;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20PX);
+            border-radius: 4px;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+           z-index: 100; 
+        }
+        #menu-bar a {
+            color: #fff;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+        .io {
+      color: #fff;
+      margin-right: auto;
+    }
+    #Menu,a {
+      background: transparent;
+      margin-right: 5px;
+      border-right: 2px solid rgba(20, 143, 32, 0.656);
+      backdrop-filter: blur(20PX);
+      padding-right: 15px;
+      color: #fff
+    };
+    </style>
+</head>
+<body>
+    <div id="menu-bar">
+        <b class="io">SSL Checker</b>
+       <div id="Menu">MEnu</div>
+       <a href="{% url 'home' %}">home</a>
+        <a href="{% url 'ssl_data' %}">history</a>
+        <a href="{% url 'video_list' %}">videos</a>
+        <a href="{% url 'logout' %}">Log out</a>
+    </div>
+    <div id="ssl-container">
+        <div id="ssl-header">
+            <h1>SSL Checker</h1>
+        </div>
+        <form id="ssl-form">
+            <label for="domain">Enter a domain to check SSL:</label>
+            <input type="text" id="domain" name="domain" required>
+            <button type="submit">Check SSL</button>
+            <div id="ssl-result"></div>
+            </form>
+        </div>
+        
+    
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+        $(document).ready(function() {
+            $("#ssl-form").submit(function(e) {
+                e.preventDefault();
+                var domain = $("#domain").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/check_ssl/",
+                    data: {
+                        'domain': domain,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            var valid_until = response.valid_until;
+                            var days_left = response.days_left;
+
+                            var message = "SSL information:<br>Domain: " + response.domain + "<br>Valid until: " + valid_until + "<br>days left: " + days_left;
+                            $("#ssl-result").html(message);
+                        } else {
+                            $("#ssl-result").html("Błąd: " + response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#ssl-result").html("Błąd: " + error);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
+{% else %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprawdź SSL</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles.css' %}">
+    <style>
+      @font-face {
+          font-family: Osiris;
+          src: url('{% static "Osiris.woff2" %}') format('woff2');
+      }
+      body {
+          font-family: "Osiris", sans-serif;
+          background-image: url('{% static "image.jpg" %}');
+          background-size: cover;
+          margin: 0;
+          padding: 0;
+          text-align: center;
+      }
+      h1 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        a {
+            color: #fff;
+            font-size: 30px;
+        }
+        #top {
+            display: flex;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20PX);
+            border-radius: 4px;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+           
+           
+    }
+    .io {
+      color: #fff;
+      margin-right: auto;
+    }
+    .container {
+            margin: 300px auto 20px; 
+            max-width: 500px; 
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            padding-bottom: 10px;
+    }
+      </style>
+      </head>
+      <body>
+      </body>
+      </html>
+      <div id="top">
+        <b class="io">SSL Checker</b>
+      </div>
+      <div class="container">
+  <h1>You are not logged in</h1>
+  <a href="{% url 'login' %}">Log In</a>
+</div>
+{% endif %}
+
+
+
+  {% endblock %}
+</body>
