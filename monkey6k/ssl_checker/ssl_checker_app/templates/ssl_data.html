@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSL Certificates history</title>
+    <style>
+        @font-face {
+                font-family: Osiris;
+                src: url('{% static "Osiris.woff2" %}') format('woff2');
+        }
+        body {
+                font-family: "Osiris", sans-serif;
+                background-image: url('{% static "image.jpg" %}');
+                background-size: cover;
+                margin: 0;
+                padding: 0;
+                text-align: center;
+        }
+        h1 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #ssl-container {
+            margin: 150px auto 20px; 
+            max-width: 650px; 
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        li {
+            color: #ffffff;
+            padding-top: 3px;
+            
+        }
+        #menu-bar {
+          display: flex;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20PX);
+            border-radius: 4px;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+           z-index: 100; 
+        }
+        #menu-bar a {
+            color: #fff;
+            margin-right: 20px;
+            text-decoration: none;
+        }
+        .io {
+      color: #fff;
+      margin-right: auto;
+    }
+        #Menu,a {
+      background: transparent;
+      margin-right: 5px;
+      border-right: 2px solid rgba(20, 143, 32, 0.656);
+      backdrop-filter: blur(20PX);
+      padding-right: 15px;
+      color: #fff
+    }
+    hr.new {
+        border:1px solid rgba(20, 143, 32, 0.656);
+    }
+    #ssl-header {
+        padding: 20px;
+            background: transparent;
+            border-bottom: 2px solid rgba(20, 143, 32, 0.656); 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+           
+    }
+    </style>
+</head>
+<body>
+    <div id="menu-bar">
+        <b class="io">SSL Checker</b>
+       <div id="Menu">MEnu</div>
+       <a href="{% url 'home' %}">home</a>
+        <a href="{% url 'ssl_data' %}">history</a>
+        <a href="{% url 'video_list' %}">videos</a>
+        <a href="{% url 'logout' %}">Log out</a>
+    </div>
+    <div id="ssl-container">
+        <div id="ssl-header">
+    <h1>SSL Certificates history</h1>
+        </div>
+        {% for certificate in certificates %}
+            <li> Domain: {{ certificate.domain }}, Valid Until: {{ certificate.valid_until }}</li>
+            <hr class="new">
+        {% endfor %}
+    </div>
+</body>
+</html>
