@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Profil użytkownika</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ profile_form.as_p }}
+    <button type="submit">Zapisz profil</button>
+    <a href="{% url 'user_profile' %}" class="btn btn-primary">Wróć</a>
+  </form>
+{% endblock %}
