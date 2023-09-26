@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Informacje z 2 strony</title>
+</head>
+<body>
+    <h1>Informacje z 2 strony</h1>
+    
+    <ul>
+        {% for item in data %}
+        <li>
+            ID: {{ item.id }}<br>
+            Domain: {{ item.domain }}<br>
+            Valid Until: {{ item.valid_until }}<br>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

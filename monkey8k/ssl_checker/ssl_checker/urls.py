@@ -21,4 +21,6 @@ urlpatterns = [
     path('profil/', views.user_profile, name='user_profile'),
     path('register/', views.register, name='register'),
     path('profile/', views.profile, name='profile'),
+    path('api/', include('ssl_checker_app.urls')),
+    path('info-z-2-strony/', views.info_z_2_strony, name='info_z_2_strony'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

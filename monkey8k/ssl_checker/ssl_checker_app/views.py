@@ -15,7 +15,37 @@ from .forms import VideoSearchForm
 from .forms import CustomUserCreationForm, UserProfileForm
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
+from rest_framework import viewsets
+from ssl_checker_app.models import SSLCertificate
+from ssl_checker_app.serializer import SSLCertificateSerializer
+from django.shortcuts import render
+import requests
+
+class SSLCertificateViewSet(viewsets.ModelViewSet):
+    queryset = SSLCertificate.objects.all()
+    serializer_class = SSLCertificateSerializer
+
+    
 @login_required
+
+def info_z_2_strony(request):
+    api_url = "http://192.168.88.90:8000/api/api/SSL/"
+
+    try:
+        response = requests.get(api_url)
+
+        if response.status_code == 200:
+            data = response.json()
+            context = {'data': data}
+            
+            return render(request, 'info-z-2-strony.html', context)
+        else:
+            error_message = f"Nie udało się pobrać danych. Kod odpowiedzi: {response.status_code}"
+            return render(request, 'error.html', {'error_message': error_message})
+
+    except Exception as e:
+        error_message = f"Wystąpił błąd: {str(e)}"
+        return render(request, 'error.html', {'error_message': error_message})
 
 class CustomLoginView(LoginView):
     template_name = 'login.html' 
