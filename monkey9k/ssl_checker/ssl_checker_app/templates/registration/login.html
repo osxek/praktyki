@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Log In
+{% endblock %}
+
+{% block content %}
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <style>
+    @font-face {
+            font-family: Osiris;
+            src: url('{% static "Osiris.woff2" %}') format('woff2');
+    }
+    body {
+            font-family: "Osiris", sans-serif;
+            background-image: url('{% static "image.jpg" %}');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+    }
+    h1 {
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+    .container {
+            margin: 130px auto 20px; 
+            max-width: 500px; 
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .login-form {
+            margin: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    .page-title {
+            padding: 20px;
+            border-bottom: 2px solid rgba(20, 143, 32, 0.656);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .form {
+      margin-top: 30px;
+    }
+    .btn-primary {
+      width: 93%;
+      background-color: #ffffff;
+      color: #ffffff;
+      border: none;
+      padding: 5px 0; /* Usunięcie paddingu na bokach */
+      border-radius: 4px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      font-family: 'Osiris', sans-serif;
+    }
+    .btn-primary:hover {
+      background-color: rgba(20, 143, 32, 0.656);
+      color: #000000;
+    }
+    label {
+      color: #fff;
+    }
+    input[type="text"], input[type="password"] {
+            width: 55%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            font-family: "Osiris", sans-serif;
+            color: #fff;
+    }
+    #top {
+            display: flex;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            backdrop-filter: blur(20px);
+            border-radius: 4px;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+    }
+    .io {
+      color: #fff;
+      margin-right: auto;
+    }
+    button[type="submit"] {
+      background-color: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Osiris', sans-serif;
+    }
+    i {
+      color: white;
+    }
+  </style>
+
+  <div id="top">
+    <b class="io">SSL Checker</b>
+  </div>
+
+  <div class="container">
+    <div class="login-form">
+      <h1 class="page-title">Log In</h1>
+      <form method="post" class="form">
+        <div class="form-group text-center">
+          {% csrf_token %}
+          {{ form.username.label_tag }}
+          {{ form.username }}
+          <i class='bx bxs-user'></i>
+          {{ form.password.label_tag }}
+          {{ form.password }}
+          <i class='bx bxs-lock-alt'></i>
+        </div>
+        <button type="submit" class="btn btn-primary">Log In</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

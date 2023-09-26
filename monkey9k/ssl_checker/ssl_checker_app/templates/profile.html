@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+    <style>
+        @font-face {
+            font-family: Osiris;
+            src: url('{% static "Osiris.woff2" %}') format('woff2');
+        }
+        body {
+            font-family: "Osiris", sans-serif;
+            background-image: url('{% static "image.jpg" %}');
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #ssl-container {
+            max-width: 500px;
+            width: 100%;
+            background: transparent;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            backdrop-filter: blur(20px);
+        }
+        h1, h2 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        #ssl-header {
+            background: transparent;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+        .custom-input::placeholder {
+            color: #fff !important; /* Dodaj !important, aby nadpisać inne style */
+        }
+        .custom-input {
+            width: 85%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: transparent; /* Przezroczyste tło */
+            border: 2px solid rgba(20, 143, 32, 0.656); /* Zielona obwódka */
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            font-family: "Osiris", sans-serif;
+            color: #fff;
+        }
+        .custom-button {
+            background-color: transparent;
+            color: #fff;
+            border: 2px solid rgba(20, 143, 32, 0.656);
+            padding: 10px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 90%;
+            font-family: Osiris;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .custom-button:hover {
+            background-color: rgba(0, 100, 0, 0.9);
+        }
+        /* Styl dla przycisku "Wróć" */
+        .custom-button.back-button {
+            width: 100%; /* Ustaw szerokość na 100% */
+        }
+    </style>
+    <div id="ssl-container">
+        <div id="ssl-header">
+            <h1>user profile</h1>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ profile_form.as_p }}
+            <button type="submit" class="custom-button">Save changes</button>
+            <a href="{% url 'user_profile' %}" class="custom-button back-button">back</a>
+        </form>
+    </div>
+{% endblock %}
